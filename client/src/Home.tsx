@@ -1,12 +1,9 @@
-import Navbar from "./components/Navbar";
+import HomeExperiences from "./HomeExperiences";
 
 const Home = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Navbar remains sticky or responsive */}
-      <Navbar />
-
-      {/* FirstSection full-width, responsive */}
+      <HomeExperiences />
       <div className="mt-8">{/*  */}</div>
     </div>
   );
