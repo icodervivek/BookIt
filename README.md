@@ -7,7 +7,7 @@
 ---
 
 ## 🌐 Live Demo
-🔗 **Frontend (Vercel):** [https://book-it-app.vercel.app](#)  
+🔗 **Frontend (Vercel):** [https://book-it-app-livid.vercel.app](#)  
 🔗 **Backend (Vercel):** [https://book-it-lake.vercel.app](#)
 
 ---
