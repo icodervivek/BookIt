@@ -31,6 +31,7 @@ interface Experience {
 
 interface DateOption {
   label: string;
+  isoDate: string;
 }
 
 interface SlotOption {
@@ -42,18 +43,21 @@ interface SlotOption {
 export default function ViewExperience(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const [experience, setExperience] = useState<Experience | null>(null);
-  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedDateLabel, setSelectedDateLabel] = useState<string>("");
   const [selectedSlot, setSelectedSlot] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
 
   const dates: DateOption[] =
     experience?.availableDates?.map((d) => ({
       label: new Date(d.date).toDateString(),
+      isoDate: new Date(d.date).toLocaleDateString("en-CA"),
     })) || [];
+
+  const selectedDateIso = dates.find((d) => d.label === selectedDateLabel)?.isoDate || "";
 
   const slots: SlotOption[] =
     experience?.availableDates
-      ?.find((d) => new Date(d.date).toDateString() === selectedDate)
+      ?.find((d) => new Date(d.date).toDateString() === selectedDateLabel)
       ?.slots?.map((s) => ({
         time: s.time,
         left: s.totalCount - s.bookedCount,
@@ -111,8 +115,8 @@ export default function ViewExperience(): JSX.Element {
 
           <DateSelector
             dates={dates}
-            selectedDate={selectedDate}
-            onSelect={setSelectedDate}
+            selectedDate={selectedDateLabel}
+            onSelect={setSelectedDateLabel}
           />
 
           <TimeSlotSelector
@@ -136,13 +140,13 @@ export default function ViewExperience(): JSX.Element {
           <PriceSummaryCard
             experienceId={experience._id}
             experienceName={experience.experienceName}
-            selectedDate={selectedDate}
+            selectedDate={selectedDateIso}
             selectedSlot={selectedSlot}
             price={experience.experiencePrice}
             tax={59}
             quantity={quantity}
             setQuantity={setQuantity}
-            isActive={!!selectedDate && !!selectedSlot}
+            isActive={!!selectedDateLabel && !!selectedSlot}
             maxQuantity={
               slots.find((s) => s.time === selectedSlot)?.left || 1
             }

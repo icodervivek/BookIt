@@ -50,15 +50,12 @@ export default function PriceSummary({
 
     setLoading(true);
 
-    // Convert date to ISO format (YYYY-MM-DD) for backend
-    const formattedDate = new Date(date).toLocaleDateString("en-CA");
-
     const payload = {
       fullName: formData.fullName,
       email: formData.email,
       experienceId,
       experienceName,
-      date: formattedDate,
+      date, // Already in ISO format (YYYY-MM-DD)
       time,
       quantity,
       subtotal,
@@ -67,7 +64,6 @@ export default function PriceSummary({
     };
 
     console.log("📤 Sending booking payload:", payload);
-    console.log("📅 Original date:", date, "→ Formatted:", formattedDate)
 
     try {
       const res = await axios.post(`${API_BASE_URL}/bookings`, payload);
