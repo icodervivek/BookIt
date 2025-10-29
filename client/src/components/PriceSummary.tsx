@@ -82,16 +82,24 @@ export default function PriceSummary({
       }
     } catch (err: any) {
       console.error("Booking error:", err);
-      const errorMsg = err.response?.data?.message || err.message || "Server error occurred.";
-      const missingFields = err.response?.data?.missingFields;
+      console.error("Full error response:", err.response?.data);
+      console.error("Error status:", err.response?.status);
+      
+      const errorData = err.response?.data;
+      const errorMsg = errorData?.message || err.message || "Server error occurred.";
+      const missingFields = errorData?.missingFields;
+      const availableDates = errorData?.availableDates;
+      const availableSlots = errorData?.availableSlots;
       
       if (missingFields) {
         toast.error(`Missing fields: ${missingFields.join(", ")}`);
+      } else if (availableDates) {
+        toast.error(`${errorMsg}. Available: ${availableDates.join(", ")}`);
+      } else if (availableSlots) {
+        toast.error(`${errorMsg}. Available: ${availableSlots.join(", ")}`);
       } else {
         toast.error(errorMsg);
       }
-      
-      console.error("Full error response:", err.response?.data);
     } finally {
       setLoading(false);
     }
