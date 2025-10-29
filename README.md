@@ -7,8 +7,8 @@
 ---
 
 ## 🌐 Live Demo
-🔗 **Frontend (Vercel):** [https://book-it-app-sepia.vercel.app](#)  
-🔗 **Backend (Vercel):** [https://book-it-ebon.vercel.app](#)
+🔗 **Frontend (Vercel):** [https://book-it-app-sepia.vercel.app](https://book-it-app-sepia.vercel.app)  
+🔗 **Backend (Vercel):** [https://book-it-ebon.vercel.app](https://book-it-ebon.vercel.app)
 
 ---
 
@@ -50,59 +50,16 @@ This project was developed as a fullstack assignment to demonstrate:
 
 ---
 
-## 🧩 Database Models (MongoDB)
+## 🎟️ Available Promo Codes
 
-### 🧭 Experience Model
-```js
-{
-  experienceName,
-  experiencePlace,
-  experienceDescription,
-  experienceImageURL,
-  experiencePrice,
-  experienceAbout,
-  availableDates: [
-    {
-      date,
-      slots: [
-        { time, totalCount, bookedCount }
-      ]
-    }
-  ]
-}
-```
+| Coupon Code  | Discount Value |
+|---------------|----------------|
+| **SAVE10**     | ₹10 OFF         |
+| **FLAT100**    | ₹100 OFF        |
+| **HIGHWAY200** | ₹200 OFF        |
+| **MALAMAL500** | ₹500 OFF        |
 
-### 🧾 Booking Model
-```js
-{
-  fullName,
-  email,
-  experienceId,
-  experienceName,
-  date,
-  time,
-  quantity,
-  subtotal,
-  tax,
-  total,
-  promoCode,
-  discount,
-  finalAmount,
-  status
-}
-```
-
-### 💸 Promo Code Model
-```js
-{
-  code,
-  type: "PERCENT" | "FLAT",
-  value,
-  minPurchase,
-  expiryDate,
-  isActive
-}
-```
+---
 
 ---
 
