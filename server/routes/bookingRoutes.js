@@ -1,3 +1,10 @@
+import express from "express";
+import Booking from "../models/booking.js";
+import Experience from "../models/experience.js";
+import PromoCode from "../models/promoCode.js";
+
+const router = express.Router();
+
 router.post("/", async (req, res) => {
   try {
     console.log("📥 Received booking request");
@@ -196,3 +203,5 @@ router.post("/", async (req, res) => {
     });
   }
 });
+
+export default router;
