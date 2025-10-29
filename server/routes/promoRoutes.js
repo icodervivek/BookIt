@@ -2,8 +2,12 @@ import express from "express";
 import PromoCode from "../models/promoCode.js";
 import mongoose from "mongoose";
 const router = express.Router();
+import connectToDatabase from "../lib/mongodb.js";
+
 
 router.post("/validate", async (req, res) => {
+  await connectToDatabase();
+
   const { code, subtotal } = req.body;
 
   try {

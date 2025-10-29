@@ -22,11 +22,6 @@ app.use("/experiences", experienceRoutes);
 app.use("/bookings", bookingRoutes);
 app.use("/promo", promoRoutes);
 
-// Connected to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("Connected to Mongodb"))
-  .catch((error) => console.log(`Error connecting with Mongodb`));
 
 app.get("/", (req, res) => {
   res.json({ message: "Server is running!" });

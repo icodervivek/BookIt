@@ -2,10 +2,13 @@ import express from "express";
 import Booking from "../models/booking.js";
 import Experience from "../models/experience.js";
 import PromoCode from "../models/promoCode.js";
+import connectToDatabase from "../lib/mongodb.js";
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
+  await connectToDatabase();
+
   try {
     console.log("📥 Received booking request");
     console.log("Request body:", JSON.stringify(req.body, null, 2));
@@ -25,31 +28,33 @@ router.post("/", async (req, res) => {
 
     // ✅ Validate ALL required fields
     const missingFields = [];
-    if (!fullName) missingFields.push('fullName');
-    if (!email) missingFields.push('email');
-    if (!experienceId) missingFields.push('experienceId');
-    if (!experienceName) missingFields.push('experienceName');
-    if (!date) missingFields.push('date');
-    if (!time) missingFields.push('time');
-    if (quantity === undefined || quantity === null) missingFields.push('quantity');
-    if (subtotal === undefined || subtotal === null) missingFields.push('subtotal');
-    if (tax === undefined || tax === null) missingFields.push('tax');
+    if (!fullName) missingFields.push("fullName");
+    if (!email) missingFields.push("email");
+    if (!experienceId) missingFields.push("experienceId");
+    if (!experienceName) missingFields.push("experienceName");
+    if (!date) missingFields.push("date");
+    if (!time) missingFields.push("time");
+    if (quantity === undefined || quantity === null)
+      missingFields.push("quantity");
+    if (subtotal === undefined || subtotal === null)
+      missingFields.push("subtotal");
+    if (tax === undefined || tax === null) missingFields.push("tax");
 
     if (missingFields.length > 0) {
       console.error("❌ Missing fields:", missingFields);
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: "Missing required fields",
         missingFields,
-        receivedBody: req.body
+        receivedBody: req.body,
       });
     }
 
     // ✅ Validate experienceId format (MongoDB ObjectId)
     if (!experienceId.match(/^[0-9a-fA-F]{24}$/)) {
       console.error("❌ Invalid experienceId format:", experienceId);
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: "Invalid experience ID format",
-        receivedId: experienceId
+        receivedId: experienceId,
       });
     }
 
@@ -91,12 +96,12 @@ router.post("/", async (req, res) => {
     // Check if experience exists
     console.log("🔍 Looking for experience:", experienceId);
     const experience = await Experience.findById(experienceId);
-    
+
     if (!experience) {
       console.error("❌ Experience not found:", experienceId);
-      return res.status(404).json({ 
+      return res.status(404).json({
         message: "Experience not found",
-        experienceId
+        experienceId,
       });
     }
 
@@ -106,9 +111,9 @@ router.post("/", async (req, res) => {
     const bookingDate = new Date(date);
     if (isNaN(bookingDate.getTime())) {
       console.error("❌ Invalid date format:", date);
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: "Invalid date format",
-        receivedDate: date
+        receivedDate: date,
       });
     }
 
@@ -121,15 +126,15 @@ router.post("/", async (req, res) => {
 
     if (!dateSlot) {
       console.error("❌ Date not available:", bookingDateStr);
-      const availableDates = experience.availableDates.map(d => 
+      const availableDates = experience.availableDates.map((d) =>
         new Date(d.date).toLocaleDateString("en-CA")
       );
       console.log("Available dates:", availableDates);
-      
-      return res.status(400).json({ 
+
+      return res.status(400).json({
         message: "Date not available",
         requestedDate: bookingDateStr,
-        availableDates
+        availableDates,
       });
     }
 
@@ -137,28 +142,31 @@ router.post("/", async (req, res) => {
     console.log("⏰ Looking for time slot:", time);
 
     const timeSlot = dateSlot.slots.find((s) => s.time === time);
-    
+
     if (!timeSlot) {
       console.error("❌ Time slot not found:", time);
-      const availableSlots = dateSlot.slots.map(s => s.time);
+      const availableSlots = dateSlot.slots.map((s) => s.time);
       console.log("Available slots:", availableSlots);
-      
-      return res.status(400).json({ 
+
+      return res.status(400).json({
         message: "Time slot not found",
         requestedTime: time,
-        availableSlots
+        availableSlots,
       });
     }
 
-    console.log("✅ Time slot found. Available:", timeSlot.totalCount - timeSlot.bookedCount);
+    console.log(
+      "✅ Time slot found. Available:",
+      timeSlot.totalCount - timeSlot.bookedCount
+    );
 
     // Check availability
     if (timeSlot.bookedCount + quantity > timeSlot.totalCount) {
       console.error("❌ Not enough slots");
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: "Not enough slots available",
         requested: quantity,
-        available: timeSlot.totalCount - timeSlot.bookedCount
+        available: timeSlot.totalCount - timeSlot.bookedCount,
       });
     }
 
@@ -197,9 +205,9 @@ router.post("/", async (req, res) => {
   } catch (err) {
     console.error("❌ ERROR creating booking:", err);
     console.error("Stack:", err.stack);
-    res.status(500).json({ 
+    res.status(500).json({
       message: "Error creating booking",
-      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+      error: process.env.NODE_ENV === "development" ? err.message : undefined,
     });
   }
 });

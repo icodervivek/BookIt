@@ -1,13 +1,14 @@
 import express from "express";
 import Experience from "../models/experience.js";
+import connectToDatabase from "../lib/mongodb.js";
 
 const router = express.Router();
-
 
 /**
  * Get all experiences
  */
 router.get("/", async (req, res) => {
+  await connectToDatabase();
   try {
     const experiences = await Experience.find().sort({ createdAt: -1 });
     res.status(200).json(experiences);
@@ -20,6 +21,8 @@ router.get("/", async (req, res) => {
  * Get experience by ID
  */
 router.get("/:id", async (req, res) => {
+  await connectToDatabase();
+
   try {
     const experience = await Experience.findById(req.params.id);
     if (!experience)
@@ -30,11 +33,12 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-
 /**
  * Get all slots for a specific experience (now embedded inside Experience)
  */
 router.get("/:id/slots", async (req, res) => {
+  await connectToDatabase();
+
   try {
     const experience = await Experience.findById(req.params.id);
     if (!experience)
