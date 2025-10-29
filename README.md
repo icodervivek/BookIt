@@ -7,8 +7,8 @@
 ---
 
 ## 🌐 Live Demo
-🔗 **Frontend (Vercel):** [https://book-it-app-livid.vercel.app](#)  
-🔗 **Backend (Vercel):** [https://book-it-lake.vercel.app](#)
+🔗 **Frontend (Vercel):** [https://book-it-app-sepia.vercel.app](#)  
+🔗 **Backend (Vercel):** [https://book-it-ebon.vercel.app](#)
 
 ---
 
