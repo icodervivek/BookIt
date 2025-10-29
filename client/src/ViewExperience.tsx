@@ -131,7 +131,7 @@ export default function ViewExperience(): JSX.Element {
           />
 
           <h3 className="text-lg font-semibold mt-6 mb-4">About</h3>
-          <div className="bg-[#eeeeee] rounded-lg py-2 mb-20">
+          <div className="bg-[#eeeeee] rounded-lg py-2 mb-5">
             <div className="px-5">
               <p className="text-[12px] text-gray-600">
                 {experience.experienceAbout}

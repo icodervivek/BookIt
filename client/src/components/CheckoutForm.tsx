@@ -60,7 +60,7 @@ export default function CheckoutForm({
       </div>
 
       {/* Promo Code */}
-      <div className="flex gap-2 mb-3">
+      <div className="flex flex-col md:flex-row gap-2 mb-3">
         <input
           type="text"
           placeholder="Promo code"
