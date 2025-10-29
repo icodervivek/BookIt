@@ -1,20 +1,9 @@
-import React, { useState } from "react";
+import { useState, type JSX } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-
-interface Summary {
-  experienceId: string;
-  experienceName: string;
-  date: string;
-  time: string;
-  quantity: number;
-  subtotal: number;
-  tax: number;
-  total: number;
-}
+import type { Summary } from "../types";
 
 interface PriceSummaryProps {
   summary: Summary;
@@ -23,8 +12,9 @@ interface PriceSummaryProps {
     email: string;
     agreedToTerms: boolean;
   };
-  promoCode: string;
+  promoCode: string | null;
   discount: number;
+  onConfirm: () => Promise<void>;
 }
 
 export default function PriceSummary({
@@ -82,9 +72,9 @@ export default function PriceSummary({
       } else {
         toast.error(res.data.message || "Booking failed. Try again.");
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Booking error:", err);
-      toast.error(err.response?.data?.message || "Server error occurred.");
+      toast.error("Server error occurred.");
     } finally {
       setLoading(false);
     }

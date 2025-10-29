@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./components/Navbar";
@@ -100,7 +100,7 @@ export default function ViewExperience(): JSX.Element {
           <img
             src={experience.experienceImageURL}
             alt={experience.experienceName}
-            className="w-[765px] h-[381px] object-cover rounded-[12px]"
+            className="w-[765px] h-[381px] object-cover"
           />
           <h2 className="text-3xl font-bold mt-6 text-[#161616]">
             {experience.experienceName}

@@ -1,24 +1,38 @@
-import React, { useState, ChangeEvent } from "react";
+import { useState, type ChangeEvent,  type JSX } from "react";
 
-interface CheckoutFormProps {
-  onApplyPromo: (promoCode: string) => void;
-  onChange: (e: ChangeEvent<HTMLInputElement> | { target: { name: string; value: string | boolean } }) => void;
-  formData: {
-    fullName: string;
-    email: string;
-    agreedToTerms: boolean;
+interface FormData {
+  fullName: string;
+  email: string;
+  agreedToTerms: boolean;
+}
+
+interface SyntheticChangeEvent {
+  target: {
+    name: string;
+    value: string | boolean;
   };
 }
 
-export default function CheckoutForm({ onApplyPromo, onChange, formData }: CheckoutFormProps) {
+interface CheckoutFormProps {
+  onApplyPromo: (promoCode: string) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement> | SyntheticChangeEvent) => void;
+  formData: FormData;
+}
+
+export default function CheckoutForm({
+  onApplyPromo,
+  onChange,
+  formData,
+}: CheckoutFormProps): JSX.Element {
   const [promoInput, setPromoInput] = useState<string>("");
 
-  const handleApply = () => {
+  const handleApply = (): void => {
     onApplyPromo(promoInput.trim());
   };
 
   return (
     <div className="bg-[#efefef] rounded-lg p-6 shadow-sm w-full sm:w-1/2">
+      {/* Name and Email */}
       <div className="flex flex-col sm:flex-row gap-4 mb-3">
         <div className="w-full">
           <label className="text-sm text-gray-700">Full name</label>
@@ -45,6 +59,7 @@ export default function CheckoutForm({ onApplyPromo, onChange, formData }: Check
         </div>
       </div>
 
+      {/* Promo Code */}
       <div className="flex gap-2 mb-3">
         <input
           type="text"
@@ -61,6 +76,7 @@ export default function CheckoutForm({ onApplyPromo, onChange, formData }: Check
         </button>
       </div>
 
+      {/* Terms Checkbox */}
       <div className="flex items-center gap-2">
         <input
           type="checkbox"

@@ -1,4 +1,5 @@
-import React, { useState, FormEvent, ChangeEvent } from "react";
+import { useState } from "react";
+import type { FormEvent, ChangeEvent, JSX } from "react";
 import { Search } from "lucide-react";
 import logo from "../../public/logo.png";
 import { Link } from "react-router-dom";
@@ -7,7 +8,9 @@ interface HighwayDeliteNavbarProps {
   onSearch?: (query: string) => void;
 }
 
-export default function HighwayDeliteNavbar({ onSearch }: HighwayDeliteNavbarProps) {
+export default function HighwayDeliteNavbar({
+  onSearch,
+}: HighwayDeliteNavbarProps): JSX.Element {
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
 

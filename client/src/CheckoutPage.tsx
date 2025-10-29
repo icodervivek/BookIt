@@ -1,41 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, type JSX } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CheckoutForm from "./components/CheckoutForm";
 import PriceSummary from "./components/PriceSummary";
 import Navbar from "./components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
+import type { FormData, Summary, BookingState } from "./types";
 import "react-toastify/dist/ReactToastify.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-
-interface FormData {
-  fullName: string;
-  email: string;
-  agreedToTerms: boolean;
-}
-
-interface Summary {
-  experienceId?: string;
-  experienceName: string;
-  date: string;
-  time: string;
-  quantity: number;
-  subtotal: number;
-  tax: number;
-  total: number;
-}
-
-interface BookingState {
-  experienceId?: string;
-  experienceName?: string;
-  date?: string;
-  time?: string;
-  quantity?: number;
-  subtotal?: number;
-  tax?: number;
-  total?: number;
-}
 
 export default function CheckoutPage(): JSX.Element {
   const { id: experienceId } = useParams<{ id: string }>();
@@ -102,14 +75,25 @@ export default function CheckoutPage(): JSX.Element {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => setFormData({ ...formData, [e.target.name]: e.target.value });
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | { target: { name: string; value: string | boolean } }
+  ): void => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleConfirm = async (): Promise<void> => {
     if (!formData.fullName.trim() || !formData.email.trim()) {
-      toast.error("Please fill in your full name and email before proceeding.", {
-        position: "top-center",
-      });
+      toast.error(
+        "Please fill in your full name and email before proceeding.",
+        {
+          position: "top-center",
+        }
+      );
       return;
     }
 
@@ -122,9 +106,12 @@ export default function CheckoutPage(): JSX.Element {
     }
 
     if (!formData.agreedToTerms) {
-      toast.error("Please agree to the terms and safety policy before continuing.", {
-        position: "top-center",
-      });
+      toast.error(
+        "Please agree to the terms and safety policy before continuing.",
+        {
+          position: "top-center",
+        }
+      );
       return;
     }
 
