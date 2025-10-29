@@ -48,10 +48,15 @@ export default function ViewExperience(): JSX.Element {
   const [quantity, setQuantity] = useState<number>(1);
 
   const dates: DateOption[] =
-    experience?.availableDates?.map((d) => ({
-      label: new Date(d.date).toDateString(),
-      isoDate: new Date(d.date).toLocaleDateString("en-CA"),
-    })) || [];
+    experience?.availableDates?.map((d) => {
+      const date = new Date(d.date);
+      // Extract ISO date without timezone conversion
+      const isoDate = date.toISOString().split('T')[0];
+      return {
+        label: date.toDateString(),
+        isoDate,
+      };
+    }) || [];
 
   const selectedDateIso = dates.find((d) => d.label === selectedDateLabel)?.isoDate || "";
 
