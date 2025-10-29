@@ -50,19 +50,23 @@ export default function PriceSummary({
 
     setLoading(true);
 
+    const payload = {
+      fullName: formData.fullName,
+      email: formData.email,
+      experienceId,
+      experienceName,
+      date,
+      time,
+      quantity,
+      subtotal,
+      tax,
+      promoCode: promoCode || null,
+    };
+
+    console.log("📤 Sending booking payload:", payload);
+
     try {
-      const res = await axios.post(`${API_BASE_URL}/bookings`, {
-        fullName: formData.fullName,
-        email: formData.email,
-        experienceId,
-        experienceName,
-        date,
-        time,
-        quantity,
-        subtotal,
-        tax,
-        promoCode,
-      });
+      const res = await axios.post(`${API_BASE_URL}/bookings`, payload);
 
       if (res.status === 201) {
         toast.success("Booking confirmed!");
@@ -72,9 +76,18 @@ export default function PriceSummary({
       } else {
         toast.error(res.data.message || "Booking failed. Try again.");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Booking error:", err);
-      toast.error("Server error occurred.");
+      const errorMsg = err.response?.data?.message || err.message || "Server error occurred.";
+      const missingFields = err.response?.data?.missingFields;
+      
+      if (missingFields) {
+        toast.error(`Missing fields: ${missingFields.join(", ")}`);
+      } else {
+        toast.error(errorMsg);
+      }
+      
+      console.error("Full error response:", err.response?.data);
     } finally {
       setLoading(false);
     }
