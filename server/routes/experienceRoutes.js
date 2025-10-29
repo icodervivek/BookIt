@@ -46,5 +46,4 @@ router.get("/:id/slots", async (req, res) => {
   }
 });
 
-
 export default router;
