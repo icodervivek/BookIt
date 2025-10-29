@@ -9,7 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-
 export default function CheckoutPage(): JSX.Element {
   const { id: experienceId } = useParams<{ id: string }>();
   const { state } = useLocation();
@@ -115,20 +114,33 @@ export default function CheckoutPage(): JSX.Element {
       return;
     }
 
+    const payload = {
+      fullName: formData.fullName,
+      email: formData.email,
+      experienceId: summary.experienceId,
+      experienceName: summary.experienceName,
+      date: summary.date,
+      time: summary.time,
+      quantity: summary.quantity,
+      subtotal: summary.subtotal,
+      tax: summary.tax,
+      promoCode: promo,
+    };
+
+    console.log("📤 SENDING PAYLOAD:", payload);
+    console.log("🔗 API URL:", `${API_BASE_URL}/bookings`);
+
     try {
       const res = await fetch(`${API_BASE_URL}/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          ...summary,
-          promoCode: promo,
-          discount: discount,
-          finalAmount: summary.total,
-        }),
+        body: JSON.stringify(payload),
       });
 
+      console.log("📥 RESPONSE STATUS:", res.status);
+
       const data = await res.json();
+      console.log("📥 RESPONSE DATA:", data);
 
       if (res.ok) {
         navigate("/booking-success", {
@@ -140,7 +152,7 @@ export default function CheckoutPage(): JSX.Element {
         });
       }
     } catch (err) {
-      console.error(err);
+      console.error("❌ FULL ERROR:", err);
       toast.error("Error confirming booking", { position: "top-center" });
     }
   };
